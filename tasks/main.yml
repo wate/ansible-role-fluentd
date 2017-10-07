@@ -1,0 +1,31 @@
+---
+- name: add gpg key
+  rpm_key:
+    key: https://packages.treasuredata.com/GPG-KEY-td-agent
+- name: add repository
+  yum_repository:
+    name: treasuredata
+    description: TreasureData
+    baseurl: http://packages.treasuredata.com/2/redhat/$releasever/$basearch
+    gpgcheck: yes
+    gpgkey: https://packages.treasuredata.com/GPG-KEY-td-agent
+    file: td
+- name: install td-agent
+  yum:
+    name: td-agent
+- name: create td-agent config file
+  template:
+    src: td-agent.conf.j2
+    dest: /etc/td-agent/td-agent.conf
+  notify: restart td-agent
+- name: install fluentd plugins
+  gem:
+    name: "{{ item }}"
+    user_install: no
+    executable: /usr/sbin/td-agent-gem
+  with_items: "{{ fluentd_plugins }}"
+- name: td-agent is active and enabled on system startup
+  systemd:
+    name: td-agent
+    state: started
+    enabled: yes

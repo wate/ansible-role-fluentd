@@ -1,0 +1,74 @@
+##
+# source configuration
+##
+
+{% for source_cfg in fluentd_source_cfg -%}
+<source>
+  @type {{ source_cfg['type'] }}
+  {% if source_cfg['label'] is defined -%}
+  @label @{{ source_cfg['label'] }}
+  {% endif -%}
+  {% for source_key, source_value in source_cfg.items() if source_key not in ['type', 'label', 'extra_parameters'] -%}
+  {{ source_key }} {{ source_value }}
+  {% endfor -%}
+  {% if source_cfg['extra_parameters'] is defined -%}
+  {{ source_cfg['extra_parameters']|indent(2) }}
+  {% endif -%}
+</source>
+{% endfor %}
+
+##
+# filter configuration
+##
+
+{% for filter_cfg in fluentd_filter_cfg %}
+<filter {{ filter_cfg['pattern'] }}>
+  @type {{ filter_cfg['type'] }}
+  {% if filter_cfg['label'] is defined -%}
+  @label @{{ filter_cfg['label'] }}
+  {% endif -%}
+  {% for filter_key, filter_value in filter_cfg.items() if filter_key not in ['type', 'pattern', 'directives', 'extra_parameters'] -%}
+  {{ filter_key }} {{ filter_value }}
+  {% endfor -%}
+  {% if filter_cfg['directives'] is defined -%}
+  {% for filter_directive in filter_cfg['directives'] -%}
+  <{{ filter_directive['name'] }}>
+    {% for directive_key_name, directive_key_value in filter_directive['values'].items() -%}
+    {{ directive_key_name }} {{ directive_key_value }}
+  {% endfor -%}
+  </{{ filter_directive['name'] }}>
+  {% endfor -%}
+  {% endif -%}
+  {% if filter_cfg['extra_parameters'] is defined -%}
+  {{ filter_cfg['extra_parameters'] }}
+  {% endif -%}
+</filter>
+{% endfor %}
+
+##
+# match configuration
+##
+
+{% for match_cfg in fluentd_match_cfg -%}
+<match {{ match_cfg['pattern'] }}>
+  @type {{ match_cfg['type'] }}
+  {% if match_cfg['label'] is defined -%}
+  @label @{{ match_cfg['label'] }}
+  {% endif -%}
+  {% for match_key, match_value in match_cfg.items() if match_key not in ['type', 'pattern', 'directives', 'extra_parameters'] -%}
+  {{ match_key }} {{ match_value }}
+  {% endfor -%}
+  {% if match_cfg['directives'] is defined -%}
+  {% for match_directive in match_cfg['directives'] -%}
+  <{{ match_directive['name'] }}>
+    {% for directive_key_name, directive_key_value in match_directive['values'].items() -%}
+    {{ directive_key_name }} {{ directive_key_value }}
+    {% endfor -%}
+  </{{ match_directive['name'] }}>
+  {% endfor -%}
+  {% endif -%}
+  {% if match_cfg['extra_parameters'] is defined -%}
+  {{ match_cfg['extra_parameters'] }}
+  {% endif -%}
+</match>
+{% endfor %}

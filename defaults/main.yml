@@ -1,0 +1,85 @@
+---
+fluentd_plugins:
+  - fluent-plugin-mysqlslowquery
+  - fluent-plugin-elasticsearch
+  - fluent-plugin-influxdb
+
+fluentd_source_cfg: []
+  # - type: tail
+  #   format: syslog
+  #   path: /var/log/syslog
+  #   tag: system.syslog
+  # - type: tail
+  #   format: syslog
+  #   path: /var/log/messages
+  #   tag: system.messages
+  # - type: tail
+  #   format: apache2
+  #   tag: apache.access
+  #   path: /var/log/apache2/access.log
+  # - type: tail
+  #   format: nginx
+  #   tag: nginx.access
+  #   path: /var/log/nginx/access.log
+
+fluentd_filter_cfg: []
+  # - pattern: foo.bar
+  #   type: record_transformer
+  #   directives:
+  #     - name: record
+  #       values:
+  #         hostname: '"#{Socket.gethostname}"'
+  #   extra_parameters: "@type record_transformer"
+  # - pattern: foo.bar
+  #   type: grep
+  #   regexp1: "message cool"
+  #   regexp2: 'hostname ^web\d+\.example\.com$'
+  #   exclude1: "message uncool"
+  # - pattern: foo.bar
+  #   type: stdout
+
+fluentd_match_cfg: []
+  # - pattern: system.*
+  #   type: s3
+  #   s3_bucket: "{{ lookup('env','SACLOUD_OJS_ACCESS_KEY_ID') }}"
+  #   s3_endpoint: https://b.sakurastorage.jp
+  #   aws_key_id: "{{ lookup('env','SACLOUD_OJS_ACCESS_KEY_ID') }}"
+  #   aws_sec_key: "{{ lookup('env','SACLOUD_OJS_SECRET_ACCESS_KEY') }}"
+  #   s3_object_key_format: "%{path}%{hostname}/%{time_slice}_%{index}.%{file_extension}"
+  #   signature_version: s3
+  #   buffer_path: /var/log/td-agent/buffer/s3
+  #   path: logs/
+  #   time_slice_format: "%Y%m%d%H"
+  #   time_slice_wait: 10m
+  #   buffer_chunk_limit: 256m
+  #   check_apikey_on_start: "false"
+  # - pattern: apache.*
+  #   type: elasticsearch
+  #   # optional
+  #   host: localhost
+  #   port: 9200
+  #   logstash_format: true
+  #   index_name: fluentd
+  #   type_name: fluentd
+  # - pattern: nginx.*
+  #   type: mongo
+  #   # required
+  #   database: nginx_log
+  #   # optional
+  #   collection: untagged
+  #   host: localhost
+  #   port: 27017
+  # - pattern: forward.*
+  #   type: forward
+  #   directives:
+  #     - name: server
+  #       values:
+  #         name: myserver1
+  #         host: 192.168.1.3
+  #         weight: 60
+  #     - name: server
+  #       values:
+  #         name: myserver1
+  #         host: 192.168.1.3
+  #         weight: 60
+  #         standby: null
