@@ -13,6 +13,17 @@
 - name: install td-agent
   yum:
     name: td-agent
+- name:
+  file:
+    path:
+    state: absent
+  with_items:
+    - /etc/rc1.d/K50td-agent
+    - /etc/rc2.d/S50td-agent
+    - /etc/rc3.d/S50td-agent
+    - /etc/rc4.d/S50td-agent
+    - /etc/rc5.d/S50td-agent
+    - /etc/init.d/td-agent
 - name: create td-agent config file
   template:
     src: td-agent.conf.j2
