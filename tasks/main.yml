@@ -13,9 +13,9 @@
 - name: install td-agent
   yum:
     name: td-agent
-- name:
+- name: Remove SysV init files
   file:
-    path:
+    path: "{{ item }}"
     state: absent
   with_items:
     - /etc/rc1.d/K50td-agent
