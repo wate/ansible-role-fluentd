@@ -4,9 +4,9 @@ fluentd_plugins: []
   # - fluent-plugin-influxdb
   # - fluent-plugin-rewrite
 
-fluentd_source_cfg: []
-  # - type: forward
-  #   id: input_forward
+fluentd_source_cfg:
+  - type: forward
+    id: input_forward
   # - type: http
   #   id: input_http
   #   content: |
